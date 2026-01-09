@@ -69,5 +69,5 @@ __SELECT OPTION__ :
 
 ##
 ## CONNECT WITH US :
- PHONE Number ; +92 347-5549695
+ PHONE Number ; +92 349-0916663
 ***This tool is only for educational purpose. If you use this tool for other purposes except education we will not be responsible in such cases.***
