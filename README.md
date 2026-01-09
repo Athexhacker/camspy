@@ -1,4 +1,3 @@
-<div align=center>
 
 <a href="https://github.com/Athexhacker/camspy"><img src="logo.png" alt="0" border="0" /></a> 
 
