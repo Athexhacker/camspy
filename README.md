@@ -1,4 +1,10 @@
+<div align=center>
 
+<a href="https://github.com/Athexhacker/camspy"><img src="logo.png" alt="0" border="0" /></a> 
+
+![Geo-Phone](https://img.shields.io/badge/version-v[2.1]-blue.svg)
+
+# 🕵️‍♂️ Cam Spy
 ## ABOUT TOOL :
 
 cam spy is a bash based script which is officially made for termux from this tool can hack you victims camera by simple offer page. This tool works on both rooted Android device and Non-rooted Android device.
